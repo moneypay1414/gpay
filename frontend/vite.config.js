@@ -6,7 +6,7 @@ export default defineConfig({
   base: '/',
   cacheDir: './node_modules/.vite',
   build: {
-    outDir: 'docs'
+    outDir: 'dist'
   },
   server: {
     port: 5173,
