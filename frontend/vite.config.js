@@ -3,10 +3,10 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/',
+  base: '/gpay/',
   cacheDir: './node_modules/.vite',
   build: {
-    outDir: 'dist'
+    outDir: '../docs'
   },
   server: {
     port: 5173,
