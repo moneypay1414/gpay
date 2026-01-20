@@ -1,0 +1,16 @@
+# Nixpacks configuration for Railway
+
+[build]
+# Install dependencies from backend directory
+cmds = [
+  "cd backend && npm install"
+]
+
+# Environment setup
+[env]
+NODE_ENV = "production"
+NODE_OPTIONS = "--max-old-space-size=1024"
+
+[start]
+# Start the backend server
+cmd = "cd backend && npm start"
