@@ -29,9 +29,6 @@ Thumbs.db
 logs/
 *.log
 
-# Vercel
-.vercel/
-
 # Temporary files
 *.tmp
 *.temp

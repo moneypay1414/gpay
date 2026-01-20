@@ -401,7 +401,7 @@ cd frontend && npm run dev
 3. **Create test users** to try transfers
 4. **Customize branding** (colors, logo)
 5. **Configure Twilio** for real SMS
-6. **Deploy to production** (Heroku, Vercel)
+6. **Deploy to production** (Railway)
 
 ---
 

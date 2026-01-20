@@ -269,7 +269,7 @@ cd frontend
 npm run build
 
 # Output goes to 'dist' folder
-# Deploy to Vercel, Netlify, AWS S3, etc.
+# Deploy to Railway (recommended), Netlify, AWS S3, etc.
 ```
 
 ## Deployment Guides

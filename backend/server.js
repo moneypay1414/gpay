@@ -8,43 +8,25 @@ import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import { setIO } from './utils/socket.js';
 
-// IMPORTANT: Load .env BEFORE anything else
-console.log('🔧 Loading environment variables...');
-console.log('Current working directory:', process.cwd());
-
-// Try to load .env from backend directory (where server.js is)
-const backendEnvPath = path.resolve(process.cwd(), '.env');
-console.log('Looking for .env at:', backendEnvPath);
-
-if (fs.existsSync(backendEnvPath)) {
-  console.log('✓ Found .env file, loading...');
-  const result = dotenv.config({ path: backendEnvPath });
-  if (result.error) {
-    console.warn('⚠ Error reading .env:', result.error.message);
-  } else {
-    console.log('✓ Successfully loaded .env');
-  }
+// Load environment variables
+const envPath = path.resolve(process.cwd(), '.env');
+if (fs.existsSync(envPath)) {
+  dotenv.config({ path: envPath });
 } else {
-  console.warn('⚠ .env file not found at:', backendEnvPath);
-  
-  // Try parent directory
-  const parentEnvPath = path.resolve(process.cwd(), '..', '.env');
-  console.log('Trying parent directory:', parentEnvPath);
-  if (fs.existsSync(parentEnvPath)) {
-    console.log('✓ Found .env in parent directory, loading...');
-    dotenv.config({ path: parentEnvPath });
+  const parentPath = path.resolve(process.cwd(), '..', '.env');
+  if (fs.existsSync(parentPath)) {
+    dotenv.config({ path: parentPath });
   }
 }
 
-// Log what we got
-console.log('');
-console.log('Environment Summary:');
-console.log('====================');
-console.log('NODE_ENV:', process.env.NODE_ENV || 'not set');
-console.log('PORT:', process.env.PORT || 'not set');
-console.log('MONGODB_URI:', process.env.MONGODB_URI ? '✓ configured' : '❌ NOT SET');
-console.log('FRONTEND_URL:', process.env.FRONTEND_URL || 'not set');
-console.log('');
+// Validate required environment variables
+if (!process.env.MONGODB_URI) {
+  console.error('❌ ERROR: MONGODB_URI is not set!');
+  console.error('Please set MONGODB_URI in your environment.');
+  process.exit(1);
+}
+
+console.log('🚀 Starting MoneyPay Backend...');
 
 import authRoutes from './routes/authRoutes.js';
 import transactionRoutes from './routes/transactionRoutes.js';
@@ -56,9 +38,7 @@ const require = createRequire(import.meta.url);
 const flash = require('connect-flash');
 
 const app = express();
-const httpServer = createServer(app);
-
-// Allow both common frontend ports for development (5173, 5174)
+const httpServer = createServer(app);// Allow both common frontend ports for development (5173, 5174)
 // and also read from FRONTEND_URL env var if set
 const allowedOrigins = [
   'http://localhost:5173',
@@ -88,39 +68,9 @@ const mongoUri = process.env.MONGODB_URI;
 
 // Validate MongoDB URI is set (required for all environments)
 if (!mongoUri) {
-  const errorMsg = `
-╔════════════════════════════════════════════════════════════╗
-║           MONGODB_URI NOT CONFIGURED                       ║
-╚════════════════════════════════════════════════════════════╝
-
-❌ MONGODB_URI environment variable is not set!
-
-🚀 FOR RAILWAY DEPLOYMENT:
-   1. Go to Railway Dashboard → Your Project
-   2. Click "Variables"
-   3. Add: MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/moneypay
-   4. Redeploy
-
-💻 FOR LOCAL DEVELOPMENT:
-   1. Create backend/.env file with:
-      MONGODB_URI=mongodb://localhost:27017/moneypay
-   2. Restart the server
-
-📚 MORE INFO:
-   - MongoDB Atlas: https://www.mongodb.com/cloud/atlas
-   - Railway Docs: https://docs.railway.app
-  `;
-  console.error(errorMsg);
+  console.error('❌ ERROR: MONGODB_URI is not set!');
+  console.error('See MONGODB_SETUP.md or run setup.sh for configuration instructions.');
   process.exit(1);
-}
-
-// Log which URI is being used (mask credentials)
-if (mongoUri.startsWith('mongodb+srv://')) {
-  console.log('✓ Using MongoDB Atlas (Cloud) connection');
-} else if (mongoUri.startsWith('mongodb://')) {
-  console.log('✓ Using local MongoDB connection');
-} else {
-  console.log('✓ Using MongoDB connection');
 }
 
 mongoose.connect(mongoUri, {
@@ -131,10 +81,9 @@ mongoose.connect(mongoUri, {
   socketTimeoutMS: 45000,
   retryWrites: true
 })
-  .then(() => console.log('✓ MongoDB connected successfully'))
+  .then(() => console.log('✓ MongoDB connected'))
   .catch(err => {
-    console.error('✗ MongoDB connection error:', err.message);
-    console.error('Connection string:', mongoUri.substring(0, 50) + '...');
+    console.error('❌ MongoDB connection error:', err.message);
     process.exit(1);
   });
 
@@ -168,20 +117,12 @@ app.get('/api/health', (req, res) => {
 
 // Socket.io Real-time notifications
 io.on('connection', (socket) => {
-  console.log('User connected:', socket.id);
-
   socket.on('join-user', (userId) => {
-    console.log(`User ${userId} joining room user-${userId}`);
     socket.join(`user-${userId}`);
-    console.log(`User ${userId} successfully joined room user-${userId}`);
   });
 
   socket.on('send-notification', (data) => {
     io.to(`user-${data.userId}`).emit('new-notification', data);
-  });
-
-  socket.on('disconnect', () => {
-    console.log('User disconnected:', socket.id);
   });
 });
 
@@ -190,21 +131,19 @@ app.use(flash());
 
 // Route for admin verification
 app.post('/api/admin/verify', (req, res) => {
-  // Assuming verification logic here
   const isVerified = true; // Replace with actual verification logic
-
   if (isVerified) {
     req.flash('success_msg', 'Admin verified successfully!');
-    return res.redirect('/admin/login'); // Redirect to admin login page
+    return res.redirect('/admin/login');
   } else {
     req.flash('error_msg', 'Verification failed. Please try again.');
-    return res.redirect('/admin/verify'); // Redirect back to verification page
+    return res.redirect('/admin/verify');
   }
 });
-const PORT = process.env.PORT || 5000;
 
+const PORT = process.env.PORT || 5000;
 httpServer.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`✓ Server running on port ${PORT}`);
 });
 
 export { io };

@@ -376,45 +376,9 @@ heroku create your-app-name
 git push heroku main
 ```
 
-### Frontend Deployment (Vercel)
+### Frontend Deployment
 
-#### Step 1: Prepare Environment Variables
-```bash
-cd frontend
-cp .env.example .env.local
-# Edit .env.local with your backend API URL
-```
-
-#### Step 2: Deploy to Vercel
-```bash
-# Install Vercel CLI
-npm install -g vercel
-
-# Login to Vercel
-vercel login
-
-# Deploy
-cd frontend
-vercel
-
-# For production deployment
-vercel --prod
-```
-
-#### Step 3: Configure Environment Variables in Vercel
-1. Go to your Vercel dashboard
-2. Select your project
-3. Go to Settings → Environment Variables
-4. Add: `VITE_API_URL=https://your-backend-api-url.com/api`
-
-#### Alternative: Vercel Dashboard Deployment
-1. Connect your GitHub repository to Vercel
-2. Set build settings:
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `dist`
-   - **Install Command**: `npm install`
-3. Add environment variables in the dashboard
-4. Deploy!
+For comprehensive frontend deployment instructions, see [SETUP.md](SETUP.md) Railway Deployment section.
 
 ### Environment Variables Required
 
