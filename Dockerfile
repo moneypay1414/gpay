@@ -1,3 +1,11 @@
+# NOTE: This Dockerfile is NOT being used for Railway deployment
+# Railway is configured to use nixpacks.toml for direct Node.js building
+# This file is kept for reference only if you want to use Docker locally
+#
+# If you want to use this Dockerfile:
+# 1. Update railway.json to use builder: "dockerfile"
+# 2. Run locally: docker build -t moneypay . && docker run -p 5000:5000 moneypay
+
 FROM node:18-alpine
 
 WORKDIR /app

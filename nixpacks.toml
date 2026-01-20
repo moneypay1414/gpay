@@ -1,0 +1,9 @@
+[build]
+# Install dependencies from backend directory
+cmds = [
+  "cd backend && npm install"
+]
+
+[start]
+# Start the backend server
+cmd = "cd backend && npm start"
