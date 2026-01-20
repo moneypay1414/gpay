@@ -1,53 +1,45 @@
 #!/bin/bash
-# Startup verification script for Railway deployment
+# Startup script for MoneyPay Backend
 
-# Source .env file if it exists in backend or parent directory
+# Load .env file if it exists
 if [ -f ".env" ]; then
-    export $(cat .env | grep -v '#' | xargs)
+    echo "📁 Loading .env file..."
+    set -a
+    source .env
+    set +a
 fi
 
-if [ -f "../.env" ]; then
-    export $(cat ../.env | grep -v '#' | xargs)
-fi
-
-echo "🚀 Starting MoneyPay Backend..."
-echo ""
-echo "Environment Check:"
-echo "==================="
-
+# Verify MONGODB_URI is set
 if [ -z "$MONGODB_URI" ]; then
     echo ""
     echo "❌ ERROR: MONGODB_URI is not set!"
     echo ""
     echo "╔════════════════════════════════════════════════════════════╗"
-    echo "║ How to Fix: Set MONGODB_URI Environment Variable            ║"
+    echo "║ How to Fix: MONGODB_URI Environment Variable                ║"
     echo "╚════════════════════════════════════════════════════════════╝"
     echo ""
-    echo "🏠 LOCAL DEVELOPMENT:"
-    echo "   1. Create backend/.env file with:"
-    echo "      MONGODB_URI=mongodb+srv://G-tech:gmfdeboss988@cluster0.wkaui.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0"
+    echo "1️⃣  LOCAL DEVELOPMENT:"
+    echo "   • Make sure backend/.env exists"
+    echo "   • Contains line:"
+    echo "     MONGODB_URI=mongodb+srv://G-tech:gmfdeboss988@cluster0.wkaui.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0"
     echo ""
-    echo "   2. Or run setup script:"
-    echo "      - Windows: setup.bat"
-    echo "      - macOS/Linux: chmod +x setup.sh && ./setup.sh"
+    echo "2️⃣  RAILWAY PRODUCTION:"
+    echo "   • Go to https://railway.app"
+    echo "   • Your Backend Service → Variables"
+    echo "   • Add: MONGODB_URI=..."
+    echo "   • Click Save & Redeploy"
     echo ""
-    echo "🚀 RAILWAY DEPLOYMENT:"
-    echo "   1. Go to https://railway.app"
-    echo "   2. Your Backend Service → Variables tab"
-    echo "   3. Add this variable:"
-    echo "      MONGODB_URI=mongodb+srv://G-tech:gmfdeboss988@cluster0.wkaui.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0"
-    echo "   4. Click Save & Redeploy"
-    echo ""
-    echo "📁 File Locations to Check:"
-    echo "   ✓ backend/.env (local development)"
-    echo "   ✓ Railway Variables UI (production)"
+    echo "3️⃣  QUICK FIX:"
+    echo "   • Windows: Run setup.bat"
+    echo "   • macOS/Linux: Run ./setup.sh"
     echo ""
     exit 1
 fi
 
-echo "✓ MONGODB_URI is configured"
-echo "✓ NODE_ENV=$NODE_ENV"
-echo "✓ PORT=$PORT"
+echo "🚀 Starting MoneyPay Backend..."
+echo "✓ MONGODB_URI: configured"
+echo "✓ NODE_ENV: ${NODE_ENV:-development}"
+echo "✓ PORT: ${PORT:-5000}"
 echo ""
-echo "Starting application..."
+
 exec node server.js

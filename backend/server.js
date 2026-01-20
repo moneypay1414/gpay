@@ -8,24 +8,43 @@ import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import { setIO } from './utils/socket.js';
 
-// Load .env files in order of preference (only in development/local)
-const backendEnv = path.resolve(process.cwd(), '.env');
-const envExists = fs.existsSync(backendEnv);
-if (envExists) {
-  dotenv.config({ path: backendEnv });
-}
-
-// If key env vars aren't present, attempt to load from parent directory
-if (!process.env.MONGODB_URI && envExists) {
-  const parentEnv = path.resolve(process.cwd(), '..', '.env');
-  dotenv.config({ path: parentEnv });
-}
-
-// Log environment loading for debugging
-const isProduction = process.env.NODE_ENV === 'production';
-console.log(`Running in ${isProduction ? 'PRODUCTION' : 'DEVELOPMENT'} mode`);
-console.log('Environment loaded:', process.env.MONGODB_URI ? '✓ MONGODB_URI found' : '⚠ MONGODB_URI not yet loaded');
+// IMPORTANT: Load .env BEFORE anything else
+console.log('🔧 Loading environment variables...');
 console.log('Current working directory:', process.cwd());
+
+// Try to load .env from backend directory (where server.js is)
+const backendEnvPath = path.resolve(process.cwd(), '.env');
+console.log('Looking for .env at:', backendEnvPath);
+
+if (fs.existsSync(backendEnvPath)) {
+  console.log('✓ Found .env file, loading...');
+  const result = dotenv.config({ path: backendEnvPath });
+  if (result.error) {
+    console.warn('⚠ Error reading .env:', result.error.message);
+  } else {
+    console.log('✓ Successfully loaded .env');
+  }
+} else {
+  console.warn('⚠ .env file not found at:', backendEnvPath);
+  
+  // Try parent directory
+  const parentEnvPath = path.resolve(process.cwd(), '..', '.env');
+  console.log('Trying parent directory:', parentEnvPath);
+  if (fs.existsSync(parentEnvPath)) {
+    console.log('✓ Found .env in parent directory, loading...');
+    dotenv.config({ path: parentEnvPath });
+  }
+}
+
+// Log what we got
+console.log('');
+console.log('Environment Summary:');
+console.log('====================');
+console.log('NODE_ENV:', process.env.NODE_ENV || 'not set');
+console.log('PORT:', process.env.PORT || 'not set');
+console.log('MONGODB_URI:', process.env.MONGODB_URI ? '✓ configured' : '❌ NOT SET');
+console.log('FRONTEND_URL:', process.env.FRONTEND_URL || 'not set');
+console.log('');
 
 import authRoutes from './routes/authRoutes.js';
 import transactionRoutes from './routes/transactionRoutes.js';
