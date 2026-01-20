@@ -2,6 +2,9 @@
 
 **IMPORTANT:** This checklist MUST be completed before your app will work on Railway.
 
+**⚠️ FIRST: Make sure to expose both Backend and Frontend services!**  
+See [EXPOSE_SERVICES.md](EXPOSE_SERVICES.md) for detailed instructions on making services public and getting URLs.
+
 ## Step 1: Backend Service Variables ✓ REQUIRED
 
 Go to Railway Dashboard → Your Backend Service → **Variables** tab
