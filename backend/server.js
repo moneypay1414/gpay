@@ -89,6 +89,10 @@ mongoose.connect(mongoUri, {
 
 // Routes
 app.get('/', (req, res) => {
+  res.redirect(process.env.FRONTEND_URL || 'https://gpay-production.up.railway.app');
+});
+
+app.get('/api', (req, res) => {
   res.json({
     message: 'MoneyPay API Server',
     status: 'Running',
