@@ -7,14 +7,19 @@ import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import { setIO } from './utils/socket.js';
 
-// Load .env from current working directory (backend) first
-dotenv.config();
-// If key env vars aren't present (e.g., running from backend/ but .env is in project root),
-// attempt to load the workspace .env located one level up.
+// Load .env files in order of preference
+const backendEnv = path.resolve(process.cwd(), '.env');
+dotenv.config({ path: backendEnv });
+
+// If key env vars aren't present, attempt to load from parent directory
 if (!process.env.MONGODB_URI) {
   const parentEnv = path.resolve(process.cwd(), '..', '.env');
   dotenv.config({ path: parentEnv });
 }
+
+// Log environment loading for debugging
+console.log('Environment loaded from:', process.env.MONGODB_URI ? 'success' : 'pending validation');
+console.log('Current working directory:', process.cwd());
 
 import authRoutes from './routes/authRoutes.js';
 import transactionRoutes from './routes/transactionRoutes.js';
@@ -74,10 +79,18 @@ if (mongoUri.startsWith('mongodb+srv://')) {
   console.log('✓ Using MongoDB connection');
 }
 
-mongoose.connect(mongoUri)
+mongoose.connect(mongoUri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  maxPoolSize: 10,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+  retryWrites: true
+})
   .then(() => console.log('✓ MongoDB connected successfully'))
   .catch(err => {
     console.error('✗ MongoDB connection error:', err.message);
+    console.error('Connection string:', mongoUri.substring(0, 50) + '...');
     process.exit(1);
   });
 
