@@ -89,12 +89,25 @@ mongoose.connect(mongoUri, {
 
 // Routes
 app.get('/', (req, res) => {
-  res.redirect(process.env.FRONTEND_URL || 'https://gpay-production.up.railway.app');
+  res.json({
+    message: 'MoneyPay API Server',
+    status: 'Running',
+    version: '1.0.0',
+    documentation: '/api',
+    endpoints: {
+      auth: '/api/auth',
+      transactions: '/api/transactions',
+      admin: '/api/admin',
+      notifications: '/api/notifications',
+      withdrawals: '/api/withdrawals',
+      health: '/api/health'
+    }
+  });
 });
 
 app.get('/api', (req, res) => {
   res.json({
-    message: 'MoneyPay API Server',
+    message: 'MoneyPay API Documentation',
     status: 'Running',
     version: '1.0.0',
     endpoints: {
