@@ -54,19 +54,32 @@ app.use(express.json());
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // MongoDB Connection
-const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/moneypay';
+const mongoUri = process.env.MONGODB_URI;
+
+// Validate MongoDB URI is set (required in production)
+if (!mongoUri) {
+  console.error('ERROR: MONGODB_URI environment variable is not set!');
+  console.error('Please set MONGODB_URI in your environment variables.');
+  console.error('For Railway: Set MONGODB_URI in your Railway project variables.');
+  console.error('For local development: Create a .env file with MONGODB_URI=mongodb://localhost:27017/moneypay');
+  process.exit(1);
+}
+
 // Log which URI is being used (mask credentials)
 if (mongoUri.startsWith('mongodb+srv://')) {
-  console.log('Using MongoDB URI: mongodb+srv://<cluster>');
+  console.log('✓ Using MongoDB Atlas connection');
 } else if (mongoUri.startsWith('mongodb://')) {
-  console.log(`Using MongoDB URI: ${mongoUri}`);
+  console.log('✓ Using local MongoDB connection');
 } else {
-  console.log('Using MongoDB URI from environment');
+  console.log('✓ Using MongoDB connection');
 }
 
 mongoose.connect(mongoUri)
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('MongoDB error:', err));
+  .then(() => console.log('✓ MongoDB connected successfully'))
+  .catch(err => {
+    console.error('✗ MongoDB connection error:', err.message);
+    process.exit(1);
+  });
 
 // Routes
 app.get('/', (req, res) => {
