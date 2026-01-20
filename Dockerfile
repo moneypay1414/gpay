@@ -2,10 +2,9 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy backend files and .env
+# Copy backend files
 COPY backend/package*.json ./backend/
 COPY backend ./backend/
-COPY .env .env
 
 WORKDIR /app/backend
 

@@ -3,22 +3,28 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import { setIO } from './utils/socket.js';
 
-// Load .env files in order of preference
+// Load .env files in order of preference (only in development/local)
 const backendEnv = path.resolve(process.cwd(), '.env');
-dotenv.config({ path: backendEnv });
+const envExists = fs.existsSync(backendEnv);
+if (envExists) {
+  dotenv.config({ path: backendEnv });
+}
 
 // If key env vars aren't present, attempt to load from parent directory
-if (!process.env.MONGODB_URI) {
+if (!process.env.MONGODB_URI && envExists) {
   const parentEnv = path.resolve(process.cwd(), '..', '.env');
   dotenv.config({ path: parentEnv });
 }
 
 // Log environment loading for debugging
-console.log('Environment loaded from:', process.env.MONGODB_URI ? 'success' : 'pending validation');
+const isProduction = process.env.NODE_ENV === 'production';
+console.log(`Running in ${isProduction ? 'PRODUCTION' : 'DEVELOPMENT'} mode`);
+console.log('Environment loaded:', process.env.MONGODB_URI ? '✓ MONGODB_URI found' : '⚠ MONGODB_URI not yet loaded');
 console.log('Current working directory:', process.cwd());
 
 import authRoutes from './routes/authRoutes.js';
@@ -61,18 +67,37 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 // MongoDB Connection
 const mongoUri = process.env.MONGODB_URI;
 
-// Validate MongoDB URI is set (required in production)
+// Validate MongoDB URI is set (required for all environments)
 if (!mongoUri) {
-  console.error('ERROR: MONGODB_URI environment variable is not set!');
-  console.error('Please set MONGODB_URI in your environment variables.');
-  console.error('For Railway: Set MONGODB_URI in your Railway project variables.');
-  console.error('For local development: Create a .env file with MONGODB_URI=mongodb://localhost:27017/moneypay');
+  const errorMsg = `
+╔════════════════════════════════════════════════════════════╗
+║           MONGODB_URI NOT CONFIGURED                       ║
+╚════════════════════════════════════════════════════════════╝
+
+❌ MONGODB_URI environment variable is not set!
+
+🚀 FOR RAILWAY DEPLOYMENT:
+   1. Go to Railway Dashboard → Your Project
+   2. Click "Variables"
+   3. Add: MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/moneypay
+   4. Redeploy
+
+💻 FOR LOCAL DEVELOPMENT:
+   1. Create backend/.env file with:
+      MONGODB_URI=mongodb://localhost:27017/moneypay
+   2. Restart the server
+
+📚 MORE INFO:
+   - MongoDB Atlas: https://www.mongodb.com/cloud/atlas
+   - Railway Docs: https://docs.railway.app
+  `;
+  console.error(errorMsg);
   process.exit(1);
 }
 
 // Log which URI is being used (mask credentials)
 if (mongoUri.startsWith('mongodb+srv://')) {
-  console.log('✓ Using MongoDB Atlas connection');
+  console.log('✓ Using MongoDB Atlas (Cloud) connection');
 } else if (mongoUri.startsWith('mongodb://')) {
   console.log('✓ Using local MongoDB connection');
 } else {
