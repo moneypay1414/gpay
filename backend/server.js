@@ -63,6 +63,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
+// Serve static files from frontend/dist
+const __dirname = path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Z]:)/, '$1'));
+const frontendPath = path.join(__dirname, '..', 'frontend', 'dist');
+if (fs.existsSync(frontendPath)) {
+  app.use(express.static(frontendPath));
+}
+
 // MongoDB Connection
 const mongoUri = process.env.MONGODB_URI;
 
@@ -155,6 +162,19 @@ app.post('/api/admin/verify', (req, res) => {
   } else {
     req.flash('error_msg', 'Verification failed. Please try again.');
     return res.redirect('/admin/verify');
+  }
+});
+
+// Serve index.html for all non-API routes (React Router)
+app.get('*', (req, res) => {
+  const indexPath = path.join(__dirname, '..', 'frontend', 'dist', 'index.html');
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.status(404).json({ 
+      error: 'Not found',
+      message: 'Frontend build not found. Please build the frontend first.'
+    });
   }
 });
 
