@@ -37,5 +37,46 @@ function ProtectedRoute({ children, requiredRole }) {
 }
 
 export default function App() {
-  return null;
+  return (
+    <Routes>
+      {/* Public Routes */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+
+      {/* User Routes */}
+      <Route
+        path="/user/*"
+        element={
+          <ProtectedRoute requiredRole={['user', 'agent', 'admin']}>
+            <UserLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="dashboard" element={<UserDashboard />} />
+        <Route path="send-money" element={<SendMoney />} />
+        <Route path="withdraw" element={<Withdraw />} />
+        <Route path="transactions" element={<Transactions />} />
+        <Route path="notifications" element={<Notifications />} />
+      </Route>
+
+      {/* Admin Routes */}
+      <Route
+        path="/admin/*"
+        element={
+          <ProtectedRoute requiredRole={['admin']}>
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="users" element={<AdminUsers />} />
+        <Route path="transactions" element={<AdminTransactions />} />
+        <Route path="notifications" element={<AdminNotifications />} />
+      </Route>
+
+      {/* Default redirect */}
+      <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="*" element={<Navigate to="/login" />} />
+    </Routes>
+  );
 }

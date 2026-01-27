@@ -10,6 +10,9 @@ FROM node:18-alpine
 
 WORKDIR /app
 
+# Update npm to latest
+RUN npm install -g npm@latest
+
 # Copy backend files
 COPY backend/package*.json ./backend/
 COPY backend ./backend/
@@ -17,7 +20,7 @@ COPY backend ./backend/
 WORKDIR /app/backend
 
 # Install dependencies
-RUN npm ci --only=production
+RUN npm install --production
 
 # Make startup script executable
 RUN chmod +x start.sh

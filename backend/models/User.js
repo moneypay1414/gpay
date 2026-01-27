@@ -49,13 +49,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     unique: true,
     sparse: true,
-    default: undefined
+    default: null
   },
   adminId: {
     type: String,
     unique: true,
     sparse: true,
-    default: undefined
+    default: null
   },
   // Optional reference to a StateSetting (admin's assigned state)
   state: {

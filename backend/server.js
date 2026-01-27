@@ -91,7 +91,11 @@ mongoose.connect(mongoUri, {
   .then(() => console.log('✓ MongoDB connected'))
   .catch(err => {
     console.error('❌ MongoDB connection error:', err.message);
-    process.exit(1);
+    if (process.env.NODE_ENV === 'production') {
+      process.exit(1);
+    } else {
+      console.warn('⚠️  Running in development mode without MongoDB. Some features may not work.');
+    }
   });
 
 // Routes
