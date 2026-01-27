@@ -3,7 +3,7 @@
 ## Base URL
 ```
 Development: http://localhost:5000/api
-Production: https://your-domain.com/api
+Production: http://ssswwkk4gso4ooog0scw4g8o.127.0.0.1.sslip.io/api
 ```
 
 ## Authentication
@@ -552,7 +552,7 @@ Response:
 
 ### Register
 ```bash
-curl -X POST http://localhost:5000/api/auth/register \
+curl -X POST http://ssswwkk4gso4ooog0scw4g8o.127.0.0.1.sslip.io/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "name": "John Doe",
@@ -565,7 +565,7 @@ curl -X POST http://localhost:5000/api/auth/register \
 
 ### Login
 ```bash
-curl -X POST http://localhost:5000/api/auth/login \
+curl -X POST http://ssswwkk4gso4ooog0scw4g8o.127.0.0.1.sslip.io/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "john@example.com",
@@ -575,7 +575,7 @@ curl -X POST http://localhost:5000/api/auth/login \
 
 ### Send Money
 ```bash
-curl -X POST http://localhost:5000/api/transactions/send-money \
+curl -X POST http://ssswwkk4gso4ooog0scw4g8o.127.0.0.1.sslip.io/api/transactions/send-money \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <token>" \
   -d '{
