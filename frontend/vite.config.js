@@ -12,7 +12,15 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'http://ssswwkk4gso4ooog0scw4g8o.127.0.0.1.sslip.io',
+        target: 'http://cw8goos8gg4gcw4c04ck8k4s.127.0.0.1.sslip.io',
+        changeOrigin: true
+      }
+    }
+  },
+  preview: {
+    proxy: {
+      '/api': {
+        target: 'http://cw8goos8gg4gcw4c04ck8k4s.127.0.0.1.sslip.io',
         changeOrigin: true
       }
     }
