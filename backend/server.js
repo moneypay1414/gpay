@@ -41,7 +41,7 @@ const app = express();
 const httpServer = createServer(app);// Allow both common frontend ports for development (5173, 5174)
 // and also read from FRONTEND_URL env var if set
 const allowedOrigins = [
-  'http://cw8goos8gg4gcw4c04ck8k4s.127.0.0.1.sslip.io',
+  'https://ssswwkk4gso4ooog0scw4g8o.127.0.0.1.sslip.io',
   'http://localhost:5173',
   'http://localhost:5174'
 ];
@@ -138,11 +138,11 @@ app.get('/api', (req, res) => {
   });
 });
 
-app.use('/api/auth', authRoutes);
-app.use('/api/transactions', transactionRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/notifications', notificationRoutes);
-app.use('/api/withdrawals', withdrawalRoutes);
+app.use('/auth', authRoutes);
+app.use('/transactions', transactionRoutes);
+app.use('/admin', adminRoutes);
+app.use('/notifications', notificationRoutes);
+app.use('/withdrawals', withdrawalRoutes);
 
 // Handle preflight OPTIONS requests
 app.options('*', cors({
