@@ -9,20 +9,8 @@ export default defineConfig({
     outDir: './dist'
   },
   server: {
-    port: 5173,
-    proxy: {
-      '/api': {
-        target: 'http://cw8goos8gg4gcw4c04ck8k4s.127.0.0.1.sslip.io',
-        changeOrigin: true
-      }
-    }
+    port: 5173
   },
   preview: {
-    proxy: {
-      '/api': {
-        target: 'http://cw8goos8gg4gcw4c04ck8k4s.127.0.0.1.sslip.io',
-        changeOrigin: true
-      }
-    }
   }
 });

@@ -20,78 +20,78 @@ api.interceptors.request.use((config) => {
 });
 
 export const authAPI = {
-  register: (data) => api.post('/api/auth/register', data),
-  verifyPhone: (data) => api.post('/api/auth/verify-phone', data),
-  login: (data) => api.post('/api/auth/login', data),
-  getProfile: () => api.get('/api/auth/profile'),
-  updateProfile: (data) => api.put('/api/auth/profile', data)
+  register: (data) => api.post('/auth/register', data),
+  verifyPhone: (data) => api.post('/auth/verify-phone', data),
+  login: (data) => api.post('/auth/login', data),
+  getProfile: () => api.get('/auth/profile'),
+  updateProfile: (data) => api.put('/auth/profile', data)
 };
 
 export const transactionAPI = {
-  sendMoney: (data) => api.post('/api/transactions/send-money', data),
-  withdraw: (data) => api.post('/api/transactions/withdraw', data),
-  getTransactions: () => api.get('/api/transactions/transactions'),
-  getStats: () => api.get('/api/transactions/stats'),
-  getUserInfo: (phoneNumber) => api.get(`/api/transactions/user-info/${phoneNumber}`)
+  sendMoney: (data) => api.post('/transactions/send-money', data),
+  withdraw: (data) => api.post('/transactions/withdraw', data),
+  getTransactions: () => api.get('/transactions/transactions'),
+  getStats: () => api.get('/transactions/stats'),
+  getUserInfo: (phoneNumber) => api.get(`/transactions/user-info/${phoneNumber}`)
 };
 
 export const adminAPI = {
-  topupUser: (data) => api.post('/api/admin/topup-user', data),
-  withdrawFromUser: (data) => api.post('/api/admin/withdraw-from-user', data),
-  pushMoney: (data) => api.post('/api/admin/push-money', data),
-  requestAgentWithdrawal: (data) => api.post('/api/admin/request-agent-withdrawal', data),
-  getCommission: () => api.get('/api/admin/commission'),
-  setCommission: (data) => api.post('/api/admin/commission', data),
-  getTieredCommission: () => api.get('/api/admin/tiered-commission'),
-  setTieredCommission: (data) => api.post('/api/admin/tiered-commission', data),
-  getStateSettings: () => api.get('/api/admin/state-settings'),
-  createStateSetting: (data) => api.post('/api/admin/state-settings', data),
-  updateStateSetting: (id, data) => api.put(`/api/admin/state-settings/${id}`, data),
-  deleteStateSetting: (id) => api.delete(`/api/admin/state-settings/${id}`),
-  adminSendState: (data) => api.post('/api/admin/send-state', data),
+  topupUser: (data) => api.post('/admin/topup-user', data),
+  withdrawFromUser: (data) => api.post('/admin/withdraw-from-user', data),
+  pushMoney: (data) => api.post('/admin/push-money', data),
+  requestAgentWithdrawal: (data) => api.post('/admin/request-agent-withdrawal', data),
+  getCommission: () => api.get('/admin/commission'),
+  setCommission: (data) => api.post('/admin/commission', data),
+  getTieredCommission: () => api.get('/admin/tiered-commission'),
+  setTieredCommission: (data) => api.post('/admin/tiered-commission', data),
+  getStateSettings: () => api.get('/admin/state-settings'),
+  createStateSetting: (data) => api.post('/admin/state-settings', data),
+  updateStateSetting: (id, data) => api.put(`/admin/state-settings/${id}`, data),
+  deleteStateSetting: (id) => api.delete(`/admin/state-settings/${id}`),
+  adminSendState: (data) => api.post('/admin/send-state', data),
   // currencies
-  getCurrencies: () => api.get('/api/admin/currencies'),
-  createCurrency: (data) => api.post('/api/admin/currencies', data),
-  updateCurrency: (id, data) => api.put(`/api/admin/currencies/${id}`, data),
-  deleteCurrency: (id) => api.delete(`/api/admin/currencies/${id}`),
+  getCurrencies: () => api.get('/admin/currencies'),
+  createCurrency: (data) => api.post('/admin/currencies', data),
+  updateCurrency: (id, data) => api.put(`/admin/currencies/${id}`, data),
+  deleteCurrency: (id) => api.delete(`/admin/currencies/${id}`),
   // (pairwise exchange-rate endpoints removed)
   // pairwise exchange-rates
-  getExchangeRates: (params) => api.get('/api/admin/exchange-rates', { params }),
-  createExchangeRate: (data) => api.post('/api/admin/exchange-rates', data),
-  updateExchangeRate: (id, data) => api.put(`/api/admin/exchange-rates/${id}`, data),
-  deleteExchangeRate: (id) => api.delete(`/api/admin/exchange-rates/${id}`),
-  getPendingStateSends: () => api.get('/api/admin/send-state/pending'),
-  getPendingStateSendsCount: () => api.get('/api/admin/send-state/pending/count'),
-  receiveStateSend: (id) => api.post(`/api/admin/send-state/${id}/receive`),
-  cancelStateSend: (id) => api.post(`/api/admin/send-state/${id}/cancel`),
-  getMyAdminCashedOut: () => api.get('/api/admin/stats/my-cashed-out'),
-  getMyAdminCommission: () => api.get('/api/admin/stats/my-commission'),
-  getAllUsers: () => api.get('/api/admin/users'),
-  getAllTransactions: () => api.get('/api/admin/transactions'),
-  suspendUser: (data) => api.post('/api/admin/suspend-user', data),
-  unsuspendUser: (data) => api.post('/api/admin/unsuspend-user', data),
-  getStats: () => api.get('/api/admin/stats'),
-  grantLocationPermissionToAll: () => api.post('/api/admin/grant-location'),
-  createTransaction: (data) => api.post('/api/admin/money-exchange', data)
+  getExchangeRates: (params) => api.get('/admin/exchange-rates', { params }),
+  createExchangeRate: (data) => api.post('/admin/exchange-rates', data),
+  updateExchangeRate: (id, data) => api.put(`/admin/exchange-rates/${id}`, data),
+  deleteExchangeRate: (id) => api.delete(`/admin/exchange-rates/${id}`),
+  getPendingStateSends: () => api.get('/admin/send-state/pending'),
+  getPendingStateSendsCount: () => api.get('/admin/send-state/pending/count'),
+  receiveStateSend: (id) => api.post(`/admin/send-state/${id}/receive`),
+  cancelStateSend: (id) => api.post(`/admin/send-state/${id}/cancel`),
+  getMyAdminCashedOut: () => api.get('/admin/stats/my-cashed-out'),
+  getMyAdminCommission: () => api.get('/admin/stats/my-commission'),
+  getAllUsers: () => api.get('/admin/users'),
+  getAllTransactions: () => api.get('/admin/transactions'),
+  suspendUser: (data) => api.post('/admin/suspend-user', data),
+  unsuspendUser: (data) => api.post('/admin/unsuspend-user', data),
+  getStats: () => api.get('/admin/stats'),
+  grantLocationPermissionToAll: () => api.post('/admin/grant-location'),
+  createTransaction: (data) => api.post('/admin/money-exchange', data)
 };
 
 export const notificationAPI = {
-  getNotifications: () => api.get('/api/notifications'),
-  markAsRead: (data) => api.post('/api/notifications/mark-as-read', data),
-  markAllAsRead: () => api.post('/api/notifications/mark-all-as-read'),
-  sendToAll: (data) => api.post('/api/notifications/send-to-all', data),
-  sendToUser: (data) => api.post('/api/notifications/send-to-user', data),
-  delete: (id) => api.delete(`/api/notifications/${id}`)
+  getNotifications: () => api.get('/notifications'),
+  markAsRead: (data) => api.post('/notifications/mark-as-read', data),
+  markAllAsRead: () => api.post('/notifications/mark-all-as-read'),
+  sendToAll: (data) => api.post('/notifications/send-to-all', data),
+  sendToUser: (data) => api.post('/notifications/send-to-user', data),
+  delete: (id) => api.delete(`/notifications/${id}`)
 };
 
 export const withdrawalAPI = {
-  requestWithdrawal: (data) => api.post('/api/withdrawals/request', data),
-  approveRequest: (data) => api.post('/api/withdrawals/approve', data),
-  rejectRequest: (data) => api.post('/api/withdrawals/reject', data),
-  getPendingRequests: () => api.get('/api/withdrawals/pending'),
-  approveAdminWithdrawalRequest: (data) => api.post('/api/admin/approve-withdrawal-request', data),
-  rejectAdminWithdrawalRequest: (data) => api.post('/api/admin/reject-withdrawal-request', data),
-  getAgentWithdrawalRequests: () => api.get('/api/admin/agent-withdrawal-requests')
+  requestWithdrawal: (data) => api.post('/withdrawals/request', data),
+  approveRequest: (data) => api.post('/withdrawals/approve', data),
+  rejectRequest: (data) => api.post('/withdrawals/reject', data),
+  getPendingRequests: () => api.get('/withdrawals/pending'),
+  approveAdminWithdrawalRequest: (data) => api.post('/admin/approve-withdrawal-request', data),
+  rejectAdminWithdrawalRequest: (data) => api.post('/admin/reject-withdrawal-request', data),
+  getAgentWithdrawalRequests: () => api.get('/admin/agent-withdrawal-requests')
 };
 
 export default api;
