@@ -41,7 +41,6 @@ const app = express();
 const httpServer = createServer(app);// Allow both common frontend ports for development (5173, 5174)
 // and also read from FRONTEND_URL env var if set
 const allowedOrigins = [
-  'http://ssswwkk4gso4ooog0scw4g8o.127.0.0.1.sslip.io',
   'http://localhost:5173',
   'http://localhost:5174'
 ];
